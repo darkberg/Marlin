@@ -36,7 +36,7 @@
 
 #include "timers.h"
 
-#include "WebSocketSerial.h"
+#include "serial2socket.h"
 #include "FlushableHardwareSerial.h"
 
 // ------------------------
@@ -49,7 +49,7 @@ extern portMUX_TYPE spinlock;
 
 #if ENABLED(WIFISUPPORT)
   #define NUM_SERIAL 2
-  #define MYSERIAL1 webSocketSerial
+  #define MYSERIAL1 Serial2Socket
 #else
   #define NUM_SERIAL 1
 #endif

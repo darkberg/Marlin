@@ -30,19 +30,8 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if ENABLED(WEBSUPPORT)
-  #include "spiffs.h"
-#endif
-
 #if ENABLED(WIFISUPPORT)
-  #include <ESPAsyncWebServer.h>
-  #include "wifi.h"
-  #if ENABLED(OTASUPPORT)
-    #include "ota.h"
-  #endif
-  #if ENABLED(WEBSUPPORT)
-    #include "web.h"
-  #endif
+  #include "wificonfig.h"
 #endif
 
 // ------------------------
@@ -78,30 +67,21 @@ volatile int numPWMUsed = 0,
 // Public functions
 // ------------------------
 
-void HAL_init() {
-  i2s_init();
+void HAL_init(void) {
+#if ENABLED(I2S_STEPPER_STREAM)
+    i2s_init();
+#endif
 }
 
-void HAL_init_board() {
-  #if ENABLED(WEBSUPPORT)
-    spiffs_init();
-  #endif
-
+void HAL_init_board(void) {
   #if ENABLED(WIFISUPPORT)
-    wifi_init();
-    #if ENABLED(OTASUPPORT)
-      OTA_init();
-    #endif
-    #if ENABLED(WEBSUPPORT)
-      web_init();
-    #endif
-    server.begin();
+    wifi_config.begin();
   #endif
 }
 
-void HAL_idletask() {
-  #if ENABLED(OTASUPPORT)
-    OTA_handle();
+void HAL_idletask(void) {
+  #if ENABLED(WIFISUPPORT)
+   wifi_config.handle();
   #endif
 }
 

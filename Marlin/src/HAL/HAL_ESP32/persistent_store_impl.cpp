@@ -1,9 +1,10 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
- * Based on Sprinter and grbl.
- * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
+ * Copyright (C) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2016 Bob Cousins bobcousins42@googlemail.com
+ * Copyright (c) 2015-2016 Nico Tonnhofer wurstnase.reprap@gmail.com
+ * Copyright (c) 2016 Victor Perez victor_pv@hotmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,11 +21,11 @@
  *
  */
 
-#ifdef ARDUINO_ARCH_ESP32
+#if defined(ARDUINO_ARCH_ESP32)
 
 #include "../../inc/MarlinConfig.h"
 
-#if ENABLED(EEPROM_SETTINGS) && DISABLED(FLASH_EEPROM_EMULATION)
+#if ENABLED(EEPROM_SETTINGS)
 
 #include "../shared/persistent_store_api.h"
 #include "EEPROM.h"
@@ -41,23 +42,28 @@ bool PersistentStore::access_finish() {
 }
 
 bool PersistentStore::write_data(int &pos, const uint8_t *value, size_t size, uint16_t *crc) {
+  
   for (size_t i = 0; i < size; i++) {
-    EEPROM.write(pos++, value[i]);
-    crc16(crc, &value[i], 1);
+      EEPROM.write(pos, value[i]);
+      crc16(crc, &value[i], 1);
+      pos++;
   }
   return false;
 }
 
 bool PersistentStore::read_data(int &pos, uint8_t* value, size_t size, uint16_t *crc, const bool writing/*=true*/) {
   for (size_t i = 0; i < size; i++) {
-    uint8_t c = EEPROM.read(pos++);
+    uint8_t c = EEPROM.read(pos);
     if (writing) value[i] = c;
     crc16(crc, &c, 1);
+    pos++;
   }
   return false;
 }
 
-size_t PersistentStore::capacity() { return EEPROM_SIZE; }
+size_t PersistentStore::capacity() {
+	return EEPROM_SIZE;
+}
 
 #endif // EEPROM_SETTINGS
 #endif // ARDUINO_ARCH_ESP32

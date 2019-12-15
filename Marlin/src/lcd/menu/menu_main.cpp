@@ -106,11 +106,7 @@ void menu_main() {
     SUBMENU(MSG_TUNE, menu_tune);
   }
   else {
-
     #if !HAS_ENCODER_WHEEL && ENABLED(SDSUPPORT)
-
-      // *** IF THIS SECTION IS CHANGED, REPRODUCE BELOW ***
-
       //
       // Autostart
       //
@@ -138,7 +134,6 @@ void menu_main() {
           ACTION_ITEM(MSG_MEDIA_RELEASED, nullptr);
         #endif
       }
-
     #endif // !HAS_ENCODER_WHEEL && SDSUPPORT
 
     #if MACHINE_CAN_PAUSE
@@ -202,9 +197,6 @@ void menu_main() {
   #endif
 
   #if HAS_ENCODER_WHEEL && ENABLED(SDSUPPORT)
-
-    // *** IF THIS SECTION IS CHANGED, REPRODUCE ABOVE ***
-
     //
     // Autostart
     //
@@ -232,7 +224,6 @@ void menu_main() {
         ACTION_ITEM(MSG_MEDIA_RELEASED, nullptr);
       #endif
     }
-
   #endif // HAS_ENCODER_WHEEL && SDSUPPORT
 
   #if HAS_SERVICE_INTERVALS
